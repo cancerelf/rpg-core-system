@@ -5753,6 +5753,154 @@ native BlzSetEventDamage takes real damage returns nothing
 // miscdata
 //===========================================================================
 
+library setup initializer init needs sys
+
+function setrs takes integer a,string b returns nothing
+call SaveStr(H,StringHash("rectname"),a,b)
+endfunction
+
+function setrn takes integer a,string b returns nothing
+call SaveStr(H,StringHash("regionname"),a,b)
+endfunction
+
+function sethero takes integer a,integer b,integer c,integer d,integer e,integer f,integer g returns nothing
+//save herotype
+call si("unitorder",b,a)
+call si("unitid",a,b)
+call si("classx",a,g)
+call SaveInteger(H,StringHash("unittype"),b,c)//type 21-23
+call SaveInteger(H,StringHash("unitarmor"),b,d)//barmor 1-20
+call SaveInteger(H,StringHash("unitdamage"),b,e)//bdamage 1-20
+call SaveInteger(H,StringHash("unitspell"),b,f)//bspell 1-20
+call SaveInteger(H,StringHash("unitclass"),b,a)//class 21-24
+endfunction
+
+function setskill takes integer a,integer b,integer c,integer d,integer e returns nothing
+call SaveInteger(H,StringHash("herotype"),a,b)
+call SaveInteger(H,StringHash("learnskill"),a,c)
+call SaveInteger(H,StringHash("skilltype"),a,d)
+call SaveInteger(H,StringHash("skillid"),e,c)
+call SaveInteger(H,StringHash("skillorder"),a,e)
+endfunction
+
+function setboss takes integer a,integer b,integer c returns nothing
+call si("boss0",a,b)
+call si("boss1",a,c)
+endfunction
+
+function setquest takes integer a,integer b,integer c,integer d,integer e,integer f,integer g,integer h,integer i,integer j returns nothing
+call si("questlevel",sys.questx,a)
+call si("questclass",sys.questx,b)
+call si("questtype",sys.questx,c)
+call si("questdrop",sys.questx,d)
+call si("questnum",sys.questx,e)
+call si("questaward",sys.questx,f)
+call si("questtime",sys.questx,g)
+call si("questgiver",sys.questx,h)
+call si("questanwser",sys.questx,i)
+call si("questtarget",sys.questx,j)
+set sys.questx=sys.questx+1
+endfunction
+
+function setqxy takes integer a,integer b returns nothing
+call si("qx",sys.questx,100*a)
+call si("qy",sys.questx,100*b)
+endfunction
+
+function setmisc takes integer a,integer b,integer c returns nothing
+    call si("itemorder",b,a)
+    call si("itemid",a,b)
+    call si("cost",a,c)
+endfunction
+
+function showtip takes nothing returns nothing
+local integer i=lx("tips",0)
+if i<100 then
+set i=i+1
+else
+set i=0
+endif
+call DisplayTextToForce(sys.team,text[87]+ls("tip",i))
+call sx("tips",0,i)
+endfunction
+
+function setns takes string a,string b returns nothing
+call SaveStr(H,StringHash("npcword"),sys.npcy,a)
+call SaveStr(H,StringHash("npcname"),sys.npcy,b)
+set sys.npcy=sys.npcy+1
+endfunction
+
+function setms takes string a,string b returns nothing
+call SaveStr(H,StringHash("unitword"),sys.unity,a)
+call SaveStr(H,StringHash("unitname"),sys.unity,b)
+set sys.unity=sys.unity+1
+endfunction
+
+
+function setgear takes string a,string b returns nothing
+call SaveStr(H,StringHash("gearname"),sys.itemz,a)
+call SaveStr(H,StringHash("itemdesc"),sys.itemz,b)
+set sys.itemz=sys.itemz+1
+endfunction
+
+function settask takes string a,string b,string c,string d,string e,string f returns nothing
+call ss("questtitle",sys.task0,a)
+call ss("questtip",sys.task0,b)
+call ss("questdesc",sys.task0,c)
+call ss("questback",sys.task0,d)
+call ss("questitem",sys.task0,e)
+call ss("questdone",sys.task0,f)
+set sys.task0=sys.task0+1
+endfunction
+
+function settip takes integer a,string b returns nothing
+call SaveStr(H,StringHash("tip"),a,b)
+endfunction
 
 
 
+function setss takes integer a,integer b,string c ,string d returns nothing
+local integer i=1
+loop
+exitwhen i>b
+call BlzSetAbilityTooltip(a,c,i)
+call BlzSetAbilityExtendedTooltip(a,d,i)
+endloop
+endfunction
+
+function setdest takes integer a returns nothing
+call si("destorder",a,sys.destx)
+set sys.destx=sys.destx+1
+endfunction
+
+function setmob takes integer a,integer b,integer c returns nothing
+call SaveInteger(H,StringHash("mobid"),sys.mobx,a)
+call SaveInteger(H,StringHash("mobx"),sys.mobx,b)
+call SaveInteger(H,StringHash("moby"),sys.mobx,c)
+set sys.mobx=sys.mobx+1
+endfunction
+
+function setnpc takes integer a,integer b,integer c returns nothing
+call SaveInteger(H,StringHash("npcid"),sys.npcx,a)
+call SaveInteger(H,StringHash("npcx"),sys.npcx,b)
+call SaveInteger(H,StringHash("npcy"),sys.npcx,c)
+set sys.npcx=sys.npcx+1
+endfunction
+
+function setunit takes integer a,integer b,integer c,integer d,integer e ,integer f,integer g,real h,real i, real j,real k returns nothing
+call SaveInteger(H,StringHash("unitid"),sys.unitx,a)
+call SaveInteger(H,StringHash("unitorder"),a,sys.unitx)
+call SaveInteger(H,StringHash("unitclass"),a,b)
+call SaveInteger(H,StringHash("unitrect"),a,c)
+call SaveInteger(H,StringHash("unitarmor"),a,d)
+call SaveInteger(H,StringHash("unitdamage"),a,e)
+call SaveInteger(H,StringHash("unithp"),a,f)
+call SaveInteger(H,StringHash("unitskill"),a,g)
+call SaveReal(H,StringHash("unitas"),a,h)
+call SaveReal(H,StringHash("unitcrit"),a,i)
+call SaveReal(H,StringHash("unitdodge"),a,j)
+call SaveReal(H,StringHash("unitmagic"),a,k)
+set sys.unitx=sys.unitx+1
+endfunction
+
+endlibrary
